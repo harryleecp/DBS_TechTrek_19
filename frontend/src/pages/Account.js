@@ -10,7 +10,6 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import BankAccounts from './BankAccounts.json'
 import Transaction from './Transaction';
-//import data from 'https://raw.githubusercontent.com/WeiYangChia/DBSTT1/main/Main%20Challenge%20Data/BankAccount.json'
 
 const rows = [{account_id: '123-456', account_type: 'savings', account_balance: '12345'},
               {account_id: '789-012', account_type: 'multiplier', account_balance: '67890'}]
@@ -45,34 +44,31 @@ export default function Account() {
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>ID</TableCell>
+                            <TableCell align="center">ID</TableCell>
                             <TableCell align="center">Type</TableCell>
                             <TableCell align="center">Balance</TableCell>
-                            <TableCell align="center"> 
-                                Select
-                            </TableCell>
+                            <TableCell align="center">Select</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {BankAccounts.map((row) => (
-                            <div><TableRow
-                                key={row.AccountID}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {row.AccountID}
-                                </TableCell>
-                                <TableCell align="center">{row.AccountType}</TableCell>
-                                <TableCell align="center">{row.AcccountBalance}</TableCell>
-                                <TableCell align="center">
-                                    <Button id={row.AccountID} 
-                                    value={row.AccountID}
-                                        onClick={handleChange}>View Transactions</Button>
-                                </TableCell>
-                            </TableRow>
-            
-                            {isChecked(row.AccountID) ? <Transaction accountId={selectedAccount}/> : null}
-                            </div>
+                            <React.Fragment>
+                                <TableRow
+                                    key={row.AccountID}
+                                >
+                                    <TableCell component="th" scope="row">
+                                        {row.AccountID}
+                                    </TableCell>
+                                    <TableCell align="center">{row.AccountType}</TableCell>
+                                    <TableCell align="center">{row.AcccountBalance}</TableCell>
+                                    <TableCell align="center">
+                                        <Button id={row.AccountID}
+                                                value={row.AccountID}
+                                                onClick={handleChange}>View Transactions</Button>
+                                    </TableCell>
+                                </TableRow>
+                                {isChecked(row.AccountID) ? <Transaction accountId={selectedAccount}/> : null}
+                            </React.Fragment>
                         ))}
                     </TableBody>
                 </Table>
