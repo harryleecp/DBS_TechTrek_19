@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,16 +7,23 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import axios from 'axios';
 import Stack from '@mui/material/Stack';
 import BankAccounts from './BankAccounts.json'
 import Transaction from './Transaction';
+import {getToken} from "../utils/Common";
 
 const rows = [{account_id: '123-456', account_type: 'savings', account_balance: '12345'},
               {account_id: '789-012', account_type: 'multiplier', account_balance: '67890'}]
 const label = {inputProps: {'aria-label': 'Checkbox demo'}};
 
 export default function Account() {
-    const [selectedAccount, setAccount] = React.useState('123123');
+    useEffect(() => {
+       axios.post('http://${process.env.REACT_APP_BACKEND_API}/account/list', {UserID: 1})
+           .then((res) => setAccounts(res.data))
+    }, []);
+    const [selectedAccount, setAccount] = React.useState('');
+    const [Accounts, setAccounts] = React.useState(BankAccounts);
 
   const handleChange = (event) => {
     if (event.target.value == selectedAccount) {
@@ -26,32 +33,22 @@ export default function Account() {
     }
   };
 
-  const isChecked = (AccountID) => selectedAccount == AccountID
+  const isChecked = (AccountID) => selectedAccount == AccountID;
     
     return (
         <div>
-            <Stack direction="row" spacing={2}>
-                <Button href="#text-buttons"
-                    onClick={() => {
-                    //Need to redirect to transactions
-                    alert('Choose an account');
-                    }}
-                >
-                    Schedule Transaction
-                </Button>
-            </Stack>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align="center">ID</TableCell>
-                            <TableCell align="center">Type</TableCell>
-                            <TableCell align="center">Balance</TableCell>
-                            <TableCell align="center">Select</TableCell>
+                            <TableCell align="left">ID</TableCell>
+                            <TableCell align="left">Type</TableCell>
+                            <TableCell align="left">Balance</TableCell>
+                            <TableCell align="left">Select</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {BankAccounts.map((row) => (
+                        {Accounts.map((row) => (
                             <React.Fragment>
                                 <TableRow
                                     key={row.AccountID}
@@ -59,9 +56,9 @@ export default function Account() {
                                     <TableCell component="th" scope="row">
                                         {row.AccountID}
                                     </TableCell>
-                                    <TableCell align="center">{row.AccountType}</TableCell>
-                                    <TableCell align="center">{row.AcccountBalance}</TableCell>
-                                    <TableCell align="center">
+                                    <TableCell align="left">{row.AccountType}</TableCell>
+                                    <TableCell align="left">{row.AcccountBalance}</TableCell>
+                                    <TableCell align="left">
                                         <Button id={row.AccountID}
                                                 value={row.AccountID}
                                                 onClick={handleChange}>View Transactions</Button>
