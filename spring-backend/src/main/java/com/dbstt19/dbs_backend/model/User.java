@@ -33,20 +33,4 @@ public class User {
     private String address;
     @Column(name = "OptIntoPhyStatements")
     private boolean optIntoPhyStatements;
-
-    public User(String username,
-                String password,
-                String firstName,
-                String lastName,
-                String email,
-                String address,
-                boolean optIntoPhyStatements) {
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.address = address;
-        this.optIntoPhyStatements = optIntoPhyStatements;
-    }
 }
