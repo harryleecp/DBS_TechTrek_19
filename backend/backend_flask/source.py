@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, render_template, redirect,url_for, flash,session
+from flask import Flask, redirect, request, render_template, redirect,url_for, flash,session,jsonify
 from flask_wtf import FlaskForm
 from flask_wtf.file import  FileRequired
 from accounts import Account
@@ -13,12 +13,23 @@ api = Api(app)
 
 
 @app.route('/')
-def get():
-        results = Account.query.all()
+def get(user_id):
+        # results = Account.query.all()
+        # res=[]
+        results = Account.query.filter_by(UserID = user_id).all()
+        res = []
         # return render_template('index.html', accounts = self.AccountID)
-        return render_template("index.html",accounts = results)
+        for result in results:
+            result_dict = result.__dict__
+            result_dict.pop('_sa_instance_state', None)
+            res.append(result_dict)
+
+        return render_template("index.html",accounts =res)
+
 
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
 
