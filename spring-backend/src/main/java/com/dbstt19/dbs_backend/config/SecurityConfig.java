@@ -9,9 +9,13 @@ import com.nimbusds.jose.proc.SecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -29,13 +33,17 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http// disable csrf and dont keep state
+        return http
+                .cors().and() // enable cors
+                .csrf(csrf -> csrf.disable()) // disable csrf and dont keep state
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/token").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/token").permitAll() // allow access
+                        .anyRequest().authenticated()                   //  authenticate all others
                 )
-                .httpBasic(Customizer.withDefaults())           // use basic auth (base64 user:pass)
+                //.httpBasic(Customizer.withDefaults())           // use basic auth (base64 user:pass)
                 .userDetailsService(securityUserDetailsService) // use our own db
+                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt) // jwt filter
                 .build();
     }
 
@@ -59,5 +67,13 @@ public class SecurityConfig {
     @Bean
     JwtDecoder jwtDecoder() throws JOSEException {
         return NimbusJwtDecoder.withPublicKey(rsaKey.toRSAPublicKey()).build();
+    }
+
+    @Bean
+    public AuthenticationManager authManager(SecurityUserDetailsService userDetailsService) {
+        var authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(bCryptPasswordEncoder());
+        return new ProviderManager(authProvider);
     }
 }
