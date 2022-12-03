@@ -6,40 +6,51 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-
-
-const rows = [{id: '1', name: 'name'}]
+// import axios from "axios";
+import orderBy from 'lodash/orderBy'
+import Button from '@mui/material/Button';
+import Transactions from './transactions.json'
+import Alert from '@mui/material/Alert'
+import isEmpty from 'lodash/isEmpty'
+import filter from 'lodash/filter'
+import map from 'lodash/map'
 
 export default class Transaction extends React.Component {
     componentDidMount() {
-
+        this.getTransactions()
     }
 
     state = {
-
+        accountId: '12345',
+        transactions: [],
+        message: ''
     }
 
     render() {
         return (
             <div>
+                {!isEmpty(this.state.message) ? <Alert severity="success">{this.state.message}</Alert> : null}
                 <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <Table sx={{minWidth: 650}} aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Name</TableCell>
-                                <TableCell align="right">ID</TableCell>
+                                <TableCell>Date</TableCell>
+                                <TableCell>Transaction ID</TableCell>
+                                <TableCell align="right">Receiving Account ID</TableCell>
+                                <TableCell align="right">Transaction Amount</TableCell>
+                                <TableCell align="right">Type</TableCell>
+                                <TableCell align="right">Actions</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
-                                <TableRow
-                                    key={row.name}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell component="th" scope="row">
-                                        {row.name}
-                                    </TableCell>
-                                    <TableCell align="right">{row.id}</TableCell>
+                            {this.state.transactions.map((row) => (
+                                <TableRow key={row.TransactionID}>
+                                    <TableCell component="th" scope="row">{this.getDate(row.Date)}</TableCell>
+                                    <TableCell component="th" scope="row">{row.TransactionID}</TableCell>
+                                    <TableCell align="right">{row.ReceivingAccountID}</TableCell>
+                                    <TableCell align="right">{row.TransactionAmount}</TableCell>
+                                    <TableCell align="right">{row.Comment}</TableCell>
+                                    <TableCell align="right">{this.renderDelete(row.TransactionID)}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -47,5 +58,34 @@ export default class Transaction extends React.Component {
                 </TableContainer>
             </div>
         )
+    }
+
+    renderDelete = (TransactionID) =>
+        <Button variant="contained"
+                onClick={() => this.onClick(TransactionID)}>Delete</Button>
+
+    getDate = (date) => {
+        const formattedDate = new Date(date)
+        return formattedDate.toISOString().substring(0, 10)
+    }
+
+    onClick = (TransactionID) => {
+        this.setState({
+            message: 'Transaction has been deleted',
+            transactions: filter(map(this.state.transactions, (transaction) =>
+                transaction.TransactionID !== TransactionID && transaction))
+        })
+        setTimeout(() => {
+            this.setState({message: ''})
+        }, 2000)
+        // axios.post('/transaction/delete', {accountId: this.state.accountId, TransactionId})
+        //     .then((res) => this.setState({message: res.status}))
+    }
+
+    getTransactions = () => {
+        // await axios.post('/dashboard', {accountId: this.state.accountId})
+        //     .then((res) => this.setState({transactions: sortBy(res, 'Date')}))
+        const res = orderBy(Transactions, 'Date', 'desc')
+        this.setState({transactions: res})
     }
 }
