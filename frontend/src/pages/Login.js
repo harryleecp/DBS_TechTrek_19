@@ -20,12 +20,12 @@ export default function Login() {
     const username = event?.target?.username?.value;
     const password = event?.target?.password?.value;
     axios
-      .post(`${process.env.REACT_APP_BACKEND_API}/token`, {
+      .post(`http://${process.env.REACT_APP_BACKEND_API}/token`, {
         username,
         password,
       })
       .then(function (response) {
-        setUserSession(response.data.token);
+        setUserSession(response.data);
       })
       .catch(function (error) {
         console.log(error);
