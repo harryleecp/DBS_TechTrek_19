@@ -8,7 +8,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import Checkbox from '@mui/material/Checkbox';
 import BankAccounts from './BankAccounts.json'
 import Transaction from './Transaction';
 //import data from 'https://raw.githubusercontent.com/WeiYangChia/DBSTT1/main/Main%20Challenge%20Data/BankAccount.json'
@@ -18,13 +17,17 @@ const rows = [{account_id: '123-456', account_type: 'savings', account_balance: 
 const label = {inputProps: {'aria-label': 'Checkbox demo'}};
 
 export default function Account() {
-    const [checked, setChecked] = React.useState(true);
+    const [selectedAccount, setAccount] = React.useState('123123');
 
   const handleChange = (event) => {
-    
+    if (event.target.value == selectedAccount) {
+        setAccount('')
+    } else {
+        setAccount(event.target.value);
+    }
   };
-    
 
+  const isChecked = (AccountID) => selectedAccount == AccountID
     
     return (
         <div>
@@ -44,15 +47,15 @@ export default function Account() {
                         <TableRow>
                             <TableCell>ID</TableCell>
                             <TableCell align="center">Type</TableCell>
-                            <TableCell align="right">Balance</TableCell>
-                            <TableCell align="right"> 
+                            <TableCell align="center">Balance</TableCell>
+                            <TableCell align="center"> 
                                 Select
                             </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {BankAccounts.map((row) => (
-                            <TableRow
+                            <div><TableRow
                                 key={row.AccountID}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
@@ -60,30 +63,21 @@ export default function Account() {
                                     {row.AccountID}
                                 </TableCell>
                                 <TableCell align="center">{row.AccountType}</TableCell>
-                                <TableCell align="right">{row.AccountBalance}</TableCell>
-                                <TableCell align="right">
-                                    <Checkbox id={row.AccountID} />
+                                <TableCell align="center">{row.AcccountBalance}</TableCell>
+                                <TableCell align="center">
+                                    <Button id={row.AccountID} 
+                                    value={row.AccountID}
+                                        onClick={handleChange}>View Transactions</Button>
                                 </TableCell>
                             </TableRow>
+            
+                            {isChecked(row.AccountID) ? <Transaction accountId={selectedAccount}/> : null}
+                            </div>
                         ))}
-                        {/* {rows.map((row) => (
-                            <TableRow
-                                key={row.name}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {row.account_id}
-                                </TableCell>
-                                <TableCell align="center">{row.account_type}</TableCell>
-                                <TableCell align="right">{row.account_balance}</TableCell>
-                                <TableCell align="right">
-                                    <Checkbox id={row.account_id} />
-                                </TableCell>
-                            </TableRow>
-                        ))} */}
                     </TableBody>
                 </Table>
             </TableContainer>
+
         </div>
     )
 
