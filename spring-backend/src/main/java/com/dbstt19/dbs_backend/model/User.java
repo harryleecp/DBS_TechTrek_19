@@ -1,35 +1,37 @@
 package com.dbstt19.dbs_backend.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "users")
+@Table(name = "User")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class User {
     @Id
-    @GeneratedValue
-    @Column(name = "user_id")
+    @Column(name = "UserID")
     private Long userId;
-    @Column(name = "username")
+    @Column(name = "Username")
     private String username;
-    @Column(name = "password")
+    @Column(name = "Password")
     private String password;
-    @Column(name = "first_name")
+    @Column(name = "Firstname")
     private String firstName;
-    @Column(name = "last_name")
+    @Column(name = "Lastname")
     private String lastName;
-    @Column(name = "email")
+    @Column(name = "Email")
     private String email;
-    @Column(name = "address")
+    @Column(name = "Address")
     private String address;
-    @Column(name = "opt_into_phy_statements")
+    @Column(name = "OptIntoPhyStatements")
     private boolean optIntoPhyStatements;
 
     public User(String username,

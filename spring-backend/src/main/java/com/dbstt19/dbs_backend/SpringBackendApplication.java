@@ -1,6 +1,5 @@
 package com.dbstt19.dbs_backend;
 
-import com.dbstt19.dbs_backend.model.User;
 import com.dbstt19.dbs_backend.repo.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,13 +17,13 @@ public class SpringBackendApplication {
     @Bean
     CommandLineRunner commandLineRunner(UserRepository users, BCryptPasswordEncoder encoder) {
         return args -> {
-            users.save(new User("ExecutiveDBS",
-                                encoder.encode("DBSBestBank2022"),
-                                "Tom",
-                                "Lim",
-                                "TomLim@easymail.com",
-                                "Block 123 Serangoon Garden #10-129",
-                                false));
+            //            users.save(new User("ExecutiveDBS",
+            //                                encoder.encode("DBSBestBank2022"),
+            //                                "Tom",
+            //                                "Lim",
+            //                                "TomLim@easymail.com",
+            //                                "Block 123 Serangoon Garden #10-129",
+            //                                false));
         };
     }
 }
