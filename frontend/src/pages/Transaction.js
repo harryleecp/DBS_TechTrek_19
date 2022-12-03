@@ -4,7 +4,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-// import axios from "axios";
+import axios from "axios";
 import orderBy from 'lodash/orderBy'
 import Button from '@mui/material/Button';
 import Transactions from './transactions.json'
@@ -13,6 +13,7 @@ import isEmpty from 'lodash/isEmpty'
 import filter from 'lodash/filter'
 import map from 'lodash/map'
 import PropTypes from 'prop-types'
+import {getToken} from '../utils/Common'
 
 export default class Transaction extends React.Component {
     static propTypes = {
@@ -83,14 +84,27 @@ export default class Transaction extends React.Component {
         setTimeout(() => {
             this.setState({message: ''})
         }, 2000)
-        // axios.post(`http://${process.env.REACT_APP_BACKEND_API}/transaction/delete`,
-        //     {accountId: this.props.accountId, TransactionId})
-        //     .then((res) => this.setState({message: res.status}))
+        axios.post(`http://${process.env.REACT_APP_BACKEND_API}/transaction/delete`,
+            [{AccountId: this.props.accountId, TransactionID}], {
+                headers: {
+                    Authorization: `Bearer ${getToken()}`,
+                },
+            })
+            .then((res) => this.setState({
+                message: res.status,
+                transactions: filter(map(this.state.transactions, (transaction) =>
+                    transaction.TransactionID !== TransactionID && transaction))
+            }))
     }
 
     getTransactions = () => {
-        // axios.post(`http://${process.env.REACT_APP_BACKEND_API}/dashboard`, {accountId: this.props.accountId})
-        //     .then((res) => this.setState({transactions: orderBy(res.data, 'Date', 'desc')}))
+        axios.post(`http://${process.env.REACT_APP_BACKEND_API}/transactions`, {AccountID: this.props.accountId},
+            {
+                headers: {
+                    Authorization: `Bearer ${getToken()}`,
+                },
+            })
+            .then((res) => this.setState({transactions: orderBy(res.data, 'Date', 'desc')}))
         const res = orderBy(Transactions, 'Date', 'desc')
         this.setState({transactions: res})
     }
