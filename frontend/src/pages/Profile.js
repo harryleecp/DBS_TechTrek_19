@@ -20,11 +20,9 @@ export default function Profile() {
     axios
       .post(
         `http://${process.env.REACT_APP_BACKEND_API}/user`,
-        [
-          {
-            UserID,
-          },
-        ],
+        {
+          userId: Number(UserID),
+        },
         {
           headers: {
             Authorization: `Bearer ${getToken()}`,
@@ -32,8 +30,8 @@ export default function Profile() {
         }
       )
       .then(function (response) {
-        setEmail(response?.data?.[0]?.Email);
-        setAddress(response?.data?.[0]?.Address);
+        setEmail(response?.data?.email);
+        setAddress(response?.data?.address);
       })
       .catch(function (error) {
         console.log(error);
@@ -46,8 +44,6 @@ export default function Profile() {
     }
 
     getUserDetails();
-    setEmail("test@email.com");
-    setAddress("blk 100 singapore");
   }, []);
 
   const handleEmailChange = (e) => {
@@ -60,17 +56,15 @@ export default function Profile() {
 
   const handleUpdate = (event) => {
     event.preventDefault();
-    const user = getUser();
+    const userId = getUser();
     axios
       .post(
         `http://${process.env.REACT_APP_BACKEND_API}/user/update`,
-        [
-          {
-            user,
-            email,
-            address,
-          },
-        ],
+        {
+          userId,
+          email,
+          address,
+        },
         {
           headers: {
             Authorization: `Bearer ${getToken()}`,
@@ -118,6 +112,7 @@ export default function Profile() {
             id="address"
             value={address}
             onChange={handleAddressChange}
+            autoFocus
           />
           <Button
             type="submit"

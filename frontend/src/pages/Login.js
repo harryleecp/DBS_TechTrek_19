@@ -26,6 +26,7 @@ export default function Login() {
       })
       .then(function (response) {
         setUserSession(response.data);
+				window.location.href = "/dashboard";
       })
       .catch(function (error) {
         console.log(error);
