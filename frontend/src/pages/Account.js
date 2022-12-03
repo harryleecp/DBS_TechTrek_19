@@ -63,7 +63,7 @@ export default function Account() {
                                         {row.accountId}
                                     </TableCell>
                                     <TableCell align="left">{row.accountType}</TableCell>
-                                    <TableCell align="left">{row.acccountBalance}</TableCell>
+                                    <TableCell align="left">{row.accountBalance}</TableCell>
                                     <TableCell align="left">
                                         <Button id={row.accountId}
                                                 value={row.accountId}
