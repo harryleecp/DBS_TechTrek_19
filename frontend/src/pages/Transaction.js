@@ -7,6 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from "axios";
+import Create_Trx from "../components/create_trx_dialog"
 
 export default class Transaction extends React.Component {
     componentDidMount() {
@@ -59,6 +60,8 @@ export default class Transaction extends React.Component {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <br/>
+                <Create_Trx/>
             </div>
         )
     }
