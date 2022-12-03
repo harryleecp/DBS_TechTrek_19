@@ -35,6 +35,10 @@ function ResponsiveAppBar() {
     window.location.href = "/login";
   };
 
+	const handleProfile = () => {
+		window.location.href = "/profile";
+	}
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -99,6 +103,9 @@ function ResponsiveAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
+								<MenuItem key="Logout" onClick={handleProfile}>
+                  <Typography textAlign="center">Profile</Typography>
+                </MenuItem>
                 <MenuItem key="Logout" onClick={handleLogout}>
                   <Typography textAlign="center">Logout</Typography>
                 </MenuItem>

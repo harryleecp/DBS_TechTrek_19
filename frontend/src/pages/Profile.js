@@ -8,24 +8,43 @@ import Container from "@mui/material/Container";
 import axios from "axios";
 import { getToken, setUserSession } from "../utils/Common";
 
-export default function Login() {
-  useEffect(() => {
-    if (getToken()) {
-      window.location.href = "/dashboard";
-    }
-  }, []);
+export default function Profile() {
+  const getUserDetails = () => {
+    const userId = "";
+    const accountId = "";
 
-  const handleLogin = (event) => {
-    event.preventDefault();
-    const username = event?.target?.username?.value;
-    const password = event?.target?.password?.value;
     axios
-      .post(`${process.env.REACT_APP_BACKEND_API}/token`, {
-        username,
-        password,
+      .post(`${process.env.REACT_APP_BACKEND_API}/account`, {
+        AccountID: accountId,
+        UserID: userId,
       })
       .then(function (response) {
-        setUserSession(response.data.token);
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    if (!getToken()) {
+      window.location.href = "/dashboard";
+    }
+
+    getUserDetails();
+  }, []);
+
+  const handleUpdate = (event) => {
+    event.preventDefault();
+    const email = event?.target?.email?.value;
+    const address = event?.target?.address?.value;
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_API}/user/update`, {
+        email,
+        address,
+      })
+      .then(function (response) {
+        console.log(response);
       })
       .catch(function (error) {
         console.log(error);
@@ -44,28 +63,23 @@ export default function Login() {
         }}
       >
         <Typography component="h1" variant="h5">
-          Sign in
+          Change User Information
         </Typography>
-        <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleUpdate} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
-            required
             fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
+            id="email"
+            label="Email"
+            name="email"
             autoFocus
           />
           <TextField
             margin="normal"
-            required
             fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
+            name="address"
+            label="Address"
+            id="address"
           />
           <Button
             type="submit"
@@ -73,7 +87,7 @@ export default function Login() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign In
+            Update
           </Button>
         </Box>
       </Box>
