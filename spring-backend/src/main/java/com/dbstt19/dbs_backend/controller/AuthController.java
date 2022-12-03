@@ -8,6 +8,7 @@ public class AuthController {
 
     @GetMapping("/token")
     public String getToken(){
+
         return "Hello world";
     }
 }
