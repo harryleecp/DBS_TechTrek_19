@@ -19,11 +19,11 @@ import {getToken} from '../utils/Common'
 
 export default class Transaction extends React.Component {
     static propTypes = {
-        accountId: PropTypes.string
+        accountId: PropTypes.string.isRequired
     }
 
     static defaultProps = {
-        accountId: '12345'
+        // accountId: '12345'
     }
 
     state = {
