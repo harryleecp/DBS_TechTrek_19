@@ -15,17 +15,25 @@ import Alert from '@mui/material/Alert'
 import isEmpty from 'lodash/isEmpty'
 import filter from 'lodash/filter'
 import map from 'lodash/map'
+import PropTypes from 'prop-types'
 
 
 export default class Transaction extends React.Component {
-    componentDidMount() {
-        this.getTransactions()
+    static propTypes = {
+        accountId: PropTypes.string
+    }
+
+    static defaultProps = {
+        accountId: '12345'
     }
 
     state = {
-        accountId: '12345',
         transactions: [],
         message: ''
+    }
+
+    componentDidMount() {
+        this.getTransactions()
     }
 
     render() {
@@ -82,12 +90,12 @@ export default class Transaction extends React.Component {
         setTimeout(() => {
             this.setState({message: ''})
         }, 2000)
-        // axios.post('/transaction/delete', {accountId: this.state.accountId, TransactionId})
+        // axios.post('/transaction/delete', {accountId: this.props.accountId, TransactionId})
         //     .then((res) => this.setState({message: res.status}))
     }
 
     getTransactions = () => {
-        // await axios.post('/dashboard', {accountId: this.state.accountId})
+        // await axios.post('/dashboard', {accountId: this.props.accountId})
         //     .then((res) => this.setState({transactions: sortBy(res, 'Date')}))
         const res = orderBy(Transactions, 'Date', 'desc')
         this.setState({transactions: res})
