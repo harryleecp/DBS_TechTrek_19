@@ -20,7 +20,7 @@ const label = {inputProps: {'aria-label': 'Checkbox demo'}};
 export default function Account() {
     useEffect(() => {
        axios.post(`http://${process.env.REACT_APP_BACKEND_API}/account/list`,
-           {UserID: getUser()},
+           {userId: getUser()},
            {
                headers: {
                    Authorization: `Bearer ${getToken()}`,
@@ -57,20 +57,20 @@ export default function Account() {
                         {Accounts.map((row) => (
                             <React.Fragment>
                                 <TableRow
-                                    key={row.AccountID}
+                                    key={row.accountId}
                                 >
                                     <TableCell component="th" scope="row">
-                                        {row.AccountID}
+                                        {row.accountId}
                                     </TableCell>
-                                    <TableCell align="left">{row.AccountType}</TableCell>
-                                    <TableCell align="left">{row.AcccountBalance}</TableCell>
+                                    <TableCell align="left">{row.accountType}</TableCell>
+                                    <TableCell align="left">{row.acccountBalance}</TableCell>
                                     <TableCell align="left">
-                                        <Button id={row.AccountID}
-                                                value={row.AccountID}
+                                        <Button id={row.accountId}
+                                                value={row.accountId}
                                                 onClick={handleChange}>View Transactions</Button>
                                     </TableCell>
                                 </TableRow>
-                                {isChecked(row.AccountID) ? <Transaction accountId={selectedAccount}/> : null}
+                                {isChecked(row.accountId) ? <Transaction accountId={selectedAccount}/> : null}
                             </React.Fragment>
                         ))}
                     </TableBody>
