@@ -4,17 +4,17 @@ export const getToken = () => {
 };
 
 export const getUser = () => {
-	return localStorage.getItem("user") || null;
-}
+  return localStorage.getItem("user") || null;
+};
 
 // remove the token and from the local storage
 export const removeUserSession = () => {
   localStorage.removeItem("token");
-	localStorage.removeItem("user");
+  localStorage.removeItem("user");
 };
 
 // set the token in the local storage
 export const setUserSession = (data) => {
   localStorage.setItem("token", data.token);
-	localStorage.setItem("user", data.user);
+  localStorage.setItem("user", data.user);
 };

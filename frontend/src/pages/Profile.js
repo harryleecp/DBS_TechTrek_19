@@ -18,15 +18,19 @@ export default function Profile() {
     const accountId = "";
 
     axios
-      .post(`http://${process.env.REACT_APP_BACKEND_API}/user`, [
+      .post(
+        `http://${process.env.REACT_APP_BACKEND_API}/user`,
+        [
+          {
+            UserID,
+          },
+        ],
         {
-          UserID,
-        },
-      ], {
-				headers: {
-					Authorization: `Bearer ${getToken()}`,
-				},
-			})
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        }
+      )
       .then(function (response) {
         setEmail(response?.data?.[0]?.Email);
         setAddress(response?.data?.[0]?.Address);
