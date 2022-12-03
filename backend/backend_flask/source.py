@@ -1,5 +1,7 @@
 from flask import Flask, redirect, request, render_template, redirect,url_for, flash,session,jsonify
 from accounts import Account
+from user import User
+from transactions import Transaction
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api, Resource
 
@@ -22,6 +24,20 @@ class Accounts(Resource):
 
 api.add_resource(Accounts,'/account/<int:user_id>')
 
+class Users(Resource):
+    def post(self,user_id):
+        results = Users.query.filter_by(UserID = user_id).all()
+        res = []
+
+        for result in results:
+            result_dict = result.__dict__
+            result_dict.pop('_sa_instance_state', None)
+            res.append(result_dict)
+
+        return jsonify(res)
+
+api.add_resource(Users,'/user/<int:user_id>')
+
 class Transactions(Resource):
     def post(self,account_id):
         results = Transactions.query.filter_by(AccountID = account_id).all()
@@ -38,11 +54,14 @@ class Transactions(Resource):
 
         return
 
-    def delete_transactions():
-        
-        return '', 204
+    def delete_transactions(self, transaction_id):
+        Transaction.query.filter(TransactionID = transaction_id).delete()
+        db.session.commit()
+        return {"status":"Transaction has been deleted"}
 
 api.add_resource(Transactions,'/transactions/<int:account_id>')
+api.add_resource(Transactions,'/transaction/delete/<int:transaction_id>')
+
 
 if __name__ == '__main__':
     app.run(debug=True,port=8000)

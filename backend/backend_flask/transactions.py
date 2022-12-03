@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
-class Transactions(db.Model):
+class Transaction(db.Model):
     __tablename__ = 'ScheduledTransactions'
     TransactionID = db.Column(db.Integer, primary_key = True)
     AccountID = db.Column(db.Integer)
