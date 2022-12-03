@@ -40,7 +40,7 @@ export default class Transaction extends React.Component {
         return (
             <div>
                 {!isEmpty(this.state.message) ? <Alert severity="success">{this.state.message}</Alert> : null}
-                <TableContainer component={Paper}>
+                <TableContainer>
                     <Table sx={{minWidth: 650}} aria-label="simple table">
                         <TableHead>
                             <TableRow>
