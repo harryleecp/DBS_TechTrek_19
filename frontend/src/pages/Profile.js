@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -6,20 +6,34 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios from "axios";
-import { getToken, setUserSession } from "../utils/Common";
+import { getToken, getUser } from "../utils/Common";
 
 export default function Profile() {
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+
   const getUserDetails = () => {
+    const UserID = getUser();
     const userId = "";
     const accountId = "";
 
     axios
-      .post(`${process.env.REACT_APP_BACKEND_API}/account`, {
-        AccountID: accountId,
-        UserID: userId,
-      })
+      .post(
+        `http://${process.env.REACT_APP_BACKEND_API}/user`,
+        [
+          {
+            UserID,
+          },
+        ],
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        }
+      )
       .then(function (response) {
-        console.log(response);
+        setEmail(response?.data?.[0]?.Email);
+        setAddress(response?.data?.[0]?.Address);
       })
       .catch(function (error) {
         console.log(error);
@@ -32,17 +46,37 @@ export default function Profile() {
     }
 
     getUserDetails();
+    setEmail("test@email.com");
+    setAddress("blk 100 singapore");
   }, []);
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleAddressChange = (e) => {
+    setAddress(e.target.value);
+  };
 
   const handleUpdate = (event) => {
     event.preventDefault();
-    const email = event?.target?.email?.value;
-    const address = event?.target?.address?.value;
+    const user = getUser();
     axios
-      .post(`${process.env.REACT_APP_BACKEND_API}/user/update`, {
-        email,
-        address,
-      })
+      .post(
+        `http://${process.env.REACT_APP_BACKEND_API}/user/update`,
+        [
+          {
+            user,
+            email,
+            address,
+          },
+        ],
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        }
+      )
       .then(function (response) {
         console.log(response);
       })
@@ -72,6 +106,8 @@ export default function Profile() {
             id="email"
             label="Email"
             name="email"
+            value={email}
+            onChange={handleEmailChange}
             autoFocus
           />
           <TextField
@@ -80,6 +116,8 @@ export default function Profile() {
             name="address"
             label="Address"
             id="address"
+            value={address}
+            onChange={handleAddressChange}
           />
           <Button
             type="submit"
