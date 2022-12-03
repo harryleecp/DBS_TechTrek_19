@@ -18,11 +18,11 @@ import PropTypes from 'prop-types'
 
 export default class Transaction extends React.Component {
     static propTypes = {
-        accountId: PropTypes.string
+        accountId: PropTypes.string.isRequired
     }
 
     static defaultProps = {
-        accountId: '12345'
+        // accountId: '12345'
     }
 
     state = {
@@ -92,7 +92,7 @@ export default class Transaction extends React.Component {
 
     getTransactions = () => {
         // await axios.post('/dashboard', {accountId: this.props.accountId})
-        //     .then((res) => this.setState({transactions: sortBy(res, 'Date')}))
+        //     .then((res) => this.setState({transactions: orderBy(Transactions, 'Date', 'desc')}))
         const res = orderBy(Transactions, 'Date', 'desc')
         this.setState({transactions: res})
     }
