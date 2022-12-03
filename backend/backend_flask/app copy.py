@@ -1,6 +1,8 @@
 from flask import Flask, render_template
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
+
+
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
@@ -14,9 +16,6 @@ class AccountModel(db.Model):
     UserID = db.Column(db.Integer)
     AccountType = db.Column(db.String)
     AccountBalance = db.Column(db.Float)
-
-    def __repr__(self):
-        return f"Account<{self.UserID}>"
 
 
 """
@@ -40,6 +39,17 @@ class Account(Resource):
 		if not result:
 			abort(404, message="Could not find account with that id")
 		return result
+
+api.add_resource(Account, "/acc/") #<int:account_id>")
+
+"""
+@app.route('/')
+def users():
+    cur = db.connection.cursor()
+    cur.execute('''SELECT * FROM Bank-flask.BankAccount''')
+    rv = cur.fetchall()
+    return str(rv)
+"""
 
 
 if __name__ == "__main__":
