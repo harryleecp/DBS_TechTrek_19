@@ -20,4 +20,10 @@ public class UserService {
                 .orElseThrow(() -> new Exception(("Cannot find username: " + username)));
     }
 
+    public User updateUserEmailAndAddress(Long userId, String email, String address) throws Exception {
+        User user = findByUserId(userId);
+        user.setEmail(email);
+        user.setAddress(address);
+        return userRepository.save(user);
+    }
 }
