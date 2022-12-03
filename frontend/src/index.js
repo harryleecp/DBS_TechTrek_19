@@ -8,7 +8,7 @@ import Create_Trx from './components/create_trx_dialog'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Create_Trx />
+    <App />
   </React.StrictMode>
 );
 
