@@ -9,13 +9,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "ScheduledTransactions")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-public class ScheduledTransactions {
+public class ScheduledTransaction {
     @Id
     @Column(name = "TransactionID")
     private Long transactionId;
@@ -26,7 +28,7 @@ public class ScheduledTransactions {
     @Column(name = "Date")
     private String date;
     @Column(name = "TransactionAmount")
-    private Double transactionAmount;
+    private BigDecimal transactionAmount;
     @Column(name = "Comment")
     private String comment;
 }
