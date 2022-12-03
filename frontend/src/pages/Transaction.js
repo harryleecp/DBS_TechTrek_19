@@ -5,10 +5,9 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-// import axios from "axios";
-import Create_Trx from "../components/create_trx_dialog"
+import axios from "axios";
 import orderBy from 'lodash/orderBy'
+import Create_Trx from "../components/create_trx_dialog"
 import Button from '@mui/material/Button';
 import Transactions from './transactions.json'
 import Alert from '@mui/material/Alert'
@@ -16,6 +15,7 @@ import isEmpty from 'lodash/isEmpty'
 import filter from 'lodash/filter'
 import map from 'lodash/map'
 import PropTypes from 'prop-types'
+import {getToken} from '../utils/Common'
 
 
 export default class Transaction extends React.Component {
@@ -40,7 +40,7 @@ export default class Transaction extends React.Component {
         return (
             <div>
                 {!isEmpty(this.state.message) ? <Alert severity="success">{this.state.message}</Alert> : null}
-                <TableContainer component={Paper}>
+                <TableContainer>
                     <Table sx={{minWidth: 650}} aria-label="simple table">
                         <TableHead>
                             <TableRow>
@@ -90,13 +90,27 @@ export default class Transaction extends React.Component {
         setTimeout(() => {
             this.setState({message: ''})
         }, 2000)
-        // axios.post('/transaction/delete', {accountId: this.props.accountId, TransactionId})
-        //     .then((res) => this.setState({message: res.status}))
+        axios.post(`http://${process.env.REACT_APP_BACKEND_API}/transaction/delete`,
+            [{AccountId: this.props.accountId, TransactionID}], {
+                headers: {
+                    Authorization: `Bearer ${getToken()}`,
+                },
+            })
+            .then((res) => this.setState({
+                message: res.status,
+                transactions: filter(map(this.state.transactions, (transaction) =>
+                    transaction.TransactionID !== TransactionID && transaction))
+            }))
     }
 
     getTransactions = () => {
-        // await axios.post('/dashboard', {accountId: this.props.accountId})
-        //     .then((res) => this.setState({transactions: sortBy(res, 'Date')}))
+        axios.post(`http://${process.env.REACT_APP_BACKEND_API}/transactions`, {AccountID: this.props.accountId},
+            {
+                headers: {
+                    Authorization: `Bearer ${getToken()}`,
+                },
+            })
+            .then((res) => this.setState({transactions: orderBy(res.data, 'Date', 'desc')}))
         const res = orderBy(Transactions, 'Date', 'desc')
         this.setState({transactions: res})
     }
