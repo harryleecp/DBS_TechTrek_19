@@ -16,7 +16,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -41,15 +42,15 @@ public class SecurityConfig {
                         .requestMatchers("/token").permitAll() // allow access
                         .anyRequest().authenticated()                   //  authenticate all others
                 )
-                //.httpBasic(Customizer.withDefaults())           // use basic auth (base64 user:pass)
-                .userDetailsService(securityUserDetailsService) // use our own db
+                //.httpBasic(Customizer.withDefaults())             // use basic auth (base64 user:pass)
+                .userDetailsService(securityUserDetailsService)     // use our own db
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt) // jwt filter
                 .build();
     }
 
     @Bean
-    BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+    PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
     }
 
     @Bean
@@ -73,7 +74,7 @@ public class SecurityConfig {
     public AuthenticationManager authManager(SecurityUserDetailsService userDetailsService) {
         var authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(bCryptPasswordEncoder());
+        authProvider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(authProvider);
     }
 }
