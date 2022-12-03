@@ -5,7 +5,7 @@ import com.dbstt19.dbs_backend.repo.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -14,6 +14,24 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
 
     public List<ScheduledTransaction> getAll(Long accountId) {
-        return new ArrayList<>();
+        return transactionRepository.findAllByAccountId(accountId);
+    }
+
+    public ScheduledTransaction add(Long accountId,
+                                    Long receivingAccountId,
+                                    String date,
+                                    BigDecimal transactionAmount,
+                                    String comment) {
+        return transactionRepository.save(new ScheduledTransaction(
+                accountId,
+                receivingAccountId,
+                date,
+                transactionAmount,
+                comment
+        ));
+    }
+
+    public void delete(Long accountId) {
+        transactionRepository.deleteById(accountId);
     }
 }

@@ -31,4 +31,20 @@ public class ScheduledTransaction {
     private BigDecimal transactionAmount;
     @Column(name = "Comment")
     private String comment;
+
+    static Long global_id = 6L;
+
+    public ScheduledTransaction(Long accountId,
+                                Long receivingAccountId,
+                                String date,
+                                BigDecimal transactionAmount,
+                                String comment) {
+        this.transactionId = global_id;
+        global_id++;
+        this.accountId = accountId;
+        this.receivingAccountId = receivingAccountId;
+        this.date = date;
+        this.transactionAmount = transactionAmount;
+        this.comment = comment;
+    }
 }
