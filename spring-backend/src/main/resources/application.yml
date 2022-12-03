@@ -1,0 +1,15 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    username: admin
+    password: letmeinpls
+    url: jdbc:mysql://test-1.c6htqhzutcbg.ap-northeast-1.rds.amazonaws.com:3306/Bank-spring
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
