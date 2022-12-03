@@ -15,6 +15,6 @@ export const removeUserSession = () => {
 
 // set the token in the local storage
 export const setUserSession = (data) => {
-  localStorage.setItem("token", data.token);
-  localStorage.setItem("user", data.user);
+  localStorage.setItem("token", data.accessToken);
+  localStorage.setItem("user", data.userId);
 };
