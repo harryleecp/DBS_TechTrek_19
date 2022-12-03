@@ -17,14 +17,13 @@ import map from 'lodash/map'
 import PropTypes from 'prop-types'
 import {getToken} from '../utils/Common'
 
-
 export default class Transaction extends React.Component {
     static propTypes = {
-        accountId: PropTypes.string
+        accountId: PropTypes.string.isRequired
     }
 
     static defaultProps = {
-        accountId: '12345'
+        // accountId: '12345'
     }
 
     state = {
@@ -91,7 +90,7 @@ export default class Transaction extends React.Component {
             this.setState({message: ''})
         }, 2000)
         axios.post(`http://${process.env.REACT_APP_BACKEND_API}/transaction/delete`,
-            [{AccountId: this.props.accountId, TransactionID}], {
+            {AccountId: this.props.accountId, TransactionID}, {
                 headers: {
                     Authorization: `Bearer ${getToken()}`,
                 },
@@ -104,6 +103,9 @@ export default class Transaction extends React.Component {
     }
 
     getTransactions = () => {
+        const res = orderBy(Transactions, 'Date', 'desc')
+        const transactions = filter(map(res, (data) => data.AccountID == this.props.accountId && data))
+        this.setState({transactions: transactions})
         axios.post(`http://${process.env.REACT_APP_BACKEND_API}/transactions`, {AccountID: this.props.accountId},
             {
                 headers: {
@@ -111,7 +113,5 @@ export default class Transaction extends React.Component {
                 },
             })
             .then((res) => this.setState({transactions: orderBy(res.data, 'Date', 'desc')}))
-        const res = orderBy(Transactions, 'Date', 'desc')
-        this.setState({transactions: res})
     }
 }
