@@ -11,7 +11,7 @@ import axios from 'axios';
 import Stack from '@mui/material/Stack';
 import BankAccounts from './BankAccounts.json'
 import Transaction from './Transaction';
-import {getToken} from "../utils/Common";
+import {getToken, getUser} from "../utils/Common";
 
 const rows = [{account_id: '123-456', account_type: 'savings', account_balance: '12345'},
               {account_id: '789-012', account_type: 'multiplier', account_balance: '67890'}]
@@ -19,7 +19,13 @@ const label = {inputProps: {'aria-label': 'Checkbox demo'}};
 
 export default function Account() {
     useEffect(() => {
-       axios.post('http://${process.env.REACT_APP_BACKEND_API}/account/list', {UserID: 1})
+       axios.post('http://${process.env.REACT_APP_BACKEND_API}/account/list',
+           {UserID: getUser()},
+           {
+               headers: {
+                   Authorization: `Bearer ${getToken()}`,
+               }
+           })
            .then((res) => setAccounts(res.data))
     }, []);
     const [selectedAccount, setAccount] = React.useState('');
