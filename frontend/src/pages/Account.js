@@ -19,7 +19,7 @@ const label = {inputProps: {'aria-label': 'Checkbox demo'}};
 
 export default function Account() {
     useEffect(() => {
-       axios.post('http://${process.env.REACT_APP_BACKEND_API}/account/list',
+       axios.post(`http://${process.env.REACT_APP_BACKEND_API}/account/list`,
            {UserID: getUser()},
            {
                headers: {
