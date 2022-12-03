@@ -4,6 +4,7 @@ import {
   Route,
 } from "react-router-dom";
 import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
 import './App.css';
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route exact path="/login" element={<Login />} />
+          <Route exact path="/dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
     </div>
